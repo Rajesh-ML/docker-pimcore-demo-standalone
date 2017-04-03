@@ -1,13 +1,16 @@
 # Docker demo container for pimcore
 
-This is a full featured demo installation as a docker image. 
+This is a full featured Pimcore5 installation as a docker image. 
 It fulfills all system requirements as well as all best practices (such as caching, ...). 
-So this configuration can also be seen as a reference how to set up a suitable server for pimcore following best practices. 
+So this configuration can also be seen as a reference how to set up a suitable server for 
+pimcore following best practices.
+
+It is basically a modified version of: [pimcore Demo Docker GitHub Repository](https://github.com/pimcore/docker-pimcore-demo-standalone/)
 
 ## Building locally 
 ```
 mkdir pimcore-demo
-git clone https://github.com/pimcore/docker-pimcore-demo-standalone.git ./pimcore-demo/
+git clone https://github.com/christophluehr/docker-pimcore-demo-standalone.git ./pimcore-demo/
 cd pimcore-demo
 docker build -t pimcore/demo .
 docker run -d -p 80:80 --name=pimcore_demo pimcore/demo
@@ -15,8 +18,8 @@ docker run -d -p 80:80 --name=pimcore_demo pimcore/demo
 
 ## Using Docker Hub
 ```
-docker pull pimcore/docker-pimcore-demo-standalone
-docker run -d -p 80:80 --name=pimcore_demo pimcore/docker-pimcore-demo-standalone
+docker pull christophluehr/docker-pimcore-demo-standalone
+docker run -d -p 80:80 --name=pimcore_demo christophluehr/docker-pimcore-demo-standalone
 ``` 
 
 ## Running pimcore
@@ -33,11 +36,12 @@ http://IP-OR-HOSTNAME-OF-DOCKER-HOST/
 http://IP-OR-HOSTNAME-OF-DOCKER-HOST/admin/
 ```
 
-### Admin user / password
+### Installation
 ```
-http://IP-OR-HOSTNAME-OF-DOCKER-HOST/admin/
-Username: admin
-Password: demo
+http://IP-OR-HOSTNAME-OF-DOCKER-HOST/install.php
+DB-User: project_user
+DB-Password: secretpassword
+DB-Name: project_database
 ```
 
 ### References
