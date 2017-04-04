@@ -38,12 +38,14 @@ if [ ! -d /var/www/pimcore ]; then
   # download & extract
   cd /var/www
   rm -r /var/www/*
-  sudo -u www-data wget https://www.pimcore.org/download-5/pimcore-unstable.zip -O /tmp/pimcore.zip
-  sudo -u www-data unzip /tmp/pimcore.zip -d /var/www/
+  echo "Downloading Pimcore 5 ... "
+  sudo -u www-data wget https://www.pimcore.org/download-5/pimcore-unstable.zip -O /tmp/pimcore.zip 2>/dev/null >/dev/null
+  echo "Unpacking Pimcore 5 ..."
+  sudo -u www-data unzip /tmp/pimcore.zip -d /var/www/ 2>/dev/null >/dev/null
   rm /tmp/pimcore.zip 
 
-  echo "CREATE DATABASE project_database charset=utf8mb4;" | /usr/bin/mysql
-  echo "GRANT ALL PRIVILEGES ON *.* TO 'project_user'@'%' IDENTIFIED BY 'secretpassword' WITH GRANT OPTION;" | /usr/bin/mysql
+  mysql -u root -e "CREATE DATABASE project_database charset=utf8mb4;"
+  mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'project_user'@'%' IDENTIFIED BY 'secretpassword' WITH GRANT OPTION;"
 
   # ??
   # sudo -u www-data /var/www/bin/console cache:clear
@@ -53,5 +55,7 @@ fi
 
 # stop temp. mysql service
 mysqladmin -uroot shutdown
+
+echo "Finalizing startup."
 
 exec supervisord -n
