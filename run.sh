@@ -8,10 +8,15 @@ sleep 20
 
 
 # install composer if needed
-if [ ! -f /usr/local/bin/composer ]; then
+if [ ! -x /usr/local/bin/composer ]; then
+
+    echo "Installing Composer ... "
+
+    cd /tmp
+
     EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
+    /usr/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    ACTUAL_SIGNATURE=$(/usr/bin/php -r "echo hash_file('SHA384', 'composer-setup.php');")
 
     if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
     then
@@ -20,14 +25,16 @@ if [ ! -f /usr/local/bin/composer ]; then
         exit 1
     fi
 
-    php composer-setup.php --quiet
+    /usr/bin/php composer-setup.php --quiet
     mv composer.phar /usr/local/bin/composer
-    RESULT=$?
     rm composer-setup.php
 fi
 
 # install pimcore if needed
 if [ ! -d /var/www/pimcore ]; then
+
+  echo "Installing Pimcore ... "
+
   # download & extract
   cd /var/www
   rm -r /var/www/*
@@ -35,8 +42,8 @@ if [ ! -d /var/www/pimcore ]; then
   sudo -u www-data unzip /tmp/pimcore.zip -d /var/www/
   rm /tmp/pimcore.zip 
 
-  echo "CREATE DATABASE project_database charset=utf8mb4;" | mysql
-  echo "GRANT ALL PRIVILEGES ON *.* TO 'project_user'@'%' IDENTIFIED BY 'secretpassword' WITH GRANT OPTION;" | mysql
+  echo "CREATE DATABASE project_database charset=utf8mb4;" | /usr/bin/mysql
+  echo "GRANT ALL PRIVILEGES ON *.* TO 'project_user'@'%' IDENTIFIED BY 'secretpassword' WITH GRANT OPTION;" | /usr/bin/mysql
 
   # ??
   # sudo -u www-data /var/www/bin/console cache:clear
