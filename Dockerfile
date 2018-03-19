@@ -34,7 +34,10 @@ RUN chown -R www-data:www-data /var/www
 ADD vhost.conf /etc/apache2/sites-enabled/000-default.conf
 
 # configure mysql
+echo /etc/mysql/my.cnf
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+#RUN sed -i -e"s/^innodb_large_prefix\s*=\s*OFF/innodb_large_prefix = ON/" /etc/mysql/my.cnf
+RUN sed -i -e"s/^innodb_large_prefix\s*=\s*OFF/innodb_large_prefix = ON/" /etc/mysql/my.cnf
 
 # configure php-fpm
 RUN rm -r /etc/php/7.0/cli/php.ini
